@@ -1,0 +1,37 @@
+﻿<form class="d-flex" id="navSearchForm">
+    <input id="navSearchInput" class="form-control me-sm-2" type="search" placeholder="Search">
+    <button class="btn btn-secondary my-2 my-sm-0" onclick="return confirmDelete()" type="submit">Search</button>
+</form>
+
+@* @section Scripts {
+    <script>
+        $(function () {
+            console.log('console log')
+            console.log($('#navSearchForm'))
+            $('#navSearchForm').on('submit', function (e) {
+                e.preventDefault()
+                var searchInput = $('#navSearchInput').val()
+                console.log(searchInput)
+                if (searchInput.length) {
+                    window.location.replace(`https://localhost:7039/Hotels/Search/${searchInput}`)
+                }
+            })
+        })
+       function clickMethod() {
+           console.log('clicked')
+       }
+
+        $(function () {
+            console.log("from console log")
+        })
+    </script>
+} *@
+
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this category?")
+        }
+    </script>
+}

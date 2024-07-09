@@ -1,0 +1,162 @@
+﻿@model BookingViewModel
+
+<section class="container pt-3">
+
+    @{
+        await Html.RenderPartialAsync("_BookingForm", @Model);
+    }
+    
+
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            var currentDate = new Date()
+            var currentDateWithoutTime = new Date().setHours(0, 0, 0, 0)
+
+            var startEl = $('#addHotelBookingForm #startDate')
+            var endEl = $('#addHotelBookingForm #endDate')
+
+            $(startEl).prop('min', function () {
+                return currentDate.toJSON().split('T')[0];
+            });
+
+            $(endEl).prop('min', function () {
+                return addDay(currentDate)
+            });
+
+
+            var path = window.location.href.split('?')[0];
+            var urlParams = new URLSearchParams(window.location.search);
+
+            var end = urlParams.get('EndDate')
+            var start = urlParams.get('StartDate')
+            if (start) {
+                if (new Date(start) >= currentDateWithoutTime) {
+                    startEl.val(start)
+                } else {
+                    startEl.val(currentDate.toJSON().split('T')[0])
+                }
+            } else if (end) {
+                var dayLessThanEnd = new Date(end)
+                dayLessThanEnd.setDate(dayLessThanEnd.getDate() - 1)
+                if (currentDateWithoutTime <= dayLessThanEnd) {
+                    startEl.val(dayLessThanEnd.toJSON().split('T')[0])
+                } else {
+                    startEl.val(null)
+                }
+                urlParams.set('StartDate', startEl.val())
+            } else {
+                startEl.val(currentDate.toJSON().split('T')[0])
+                urlParams.set('StartDate', startEl.val())
+                updateURL()
+            }
+
+            if (end) {
+                endEl.val(end)
+            } else if (start) {
+                endEl.val(addDay(new Date(start)))
+                urlParams.set('EndDate', endEl.val())
+            } else {
+                endEl.val(addDay(new Date()))
+                urlParams.set('EndDate', endEl.val())
+            }
+
+            setEndDate()
+
+            var rooms = urlParams.get('RoomQuantity')
+            var roomsEl = $('#addHotelBookingForm #roomQuantity')
+            if (rooms) {
+                roomsEl.val(rooms)
+            } else {
+                roomsEl.val(1)
+                urlParams.set('rooms', roomsEl.val())
+            }
+
+            updateURL()
+
+            setStayDuration()
+            setTotal()
+
+            startEl.on('change', () => {
+                setEndDate()
+                setStayDuration()
+                setTotal()
+                urlParams.set('start', startEl.val())
+                updateURL()
+            })
+
+            endEl.on('change', () => {
+                setStayDuration()
+                setTotal()
+                urlParams.set('end', endEl.val())
+                updateURL()
+            })
+
+            roomsEl.on('change', () => {
+                setTotal()
+                urlParams.set('rooms', roomsEl.val())
+                updateURL()
+            })
+
+            function setEndDate() {
+                if (startEl.val() >= endEl.val()) {
+                    endEl.val(addDay(new Date(startEl.val())))
+                }
+                endEl.prop('min', function () {
+                    if (startEl.val()) {
+                        var date = new Date(startEl.val());
+                        date.setDate(date.getDate() + 1);
+                        return date.toJSON().split('T')[0];
+                    } else {
+                        return new Date().toJSON().split('T')[0];
+                    }
+                })
+            }
+
+            function calculateStayDuration() {
+                var startDate = new Date($('#addHotelBookingForm #startDate').val())
+                var endDate = new Date($('#addHotelBookingForm #endDate').val())
+                var duration = Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
+                if (duration && duration > 0) return duration
+                return 0
+            }
+
+            function setStayDuration() {
+                var stayDuration = calculateStayDuration()
+                var stayDurationEl = $('#addHotelBookingForm #bookingDuration')
+                stayDurationEl.val(stayDuration)
+            }
+
+            function calculateTotal() {
+                var nightlyRate = $('#addHotelBookingForm #roomDailyRate').val()
+                var stayDuration = calculateStayDuration()
+                var calculatedTotal = nightlyRate * stayDuration * roomsEl.val()
+                if (calculatedTotal && calculatedTotal > 0) return calculatedTotal
+                return 0
+            }
+
+            function setTotal() {
+                var total = calculateTotal()
+                $('#addHotelBookingForm #roomTotalRate').val(total)
+            }
+
+            function addDay(date) {
+                date.setDate(date.getDate() + 1)
+                return date.toJSON().split('T')[0]
+            }
+
+            function subtractDay(date) {
+                date.setDate(date.getDate() - 1)
+                return date.toJSON().split('T')[0]
+            }
+
+            function updateURL() {
+                newURL = `${path}?${urlParams}`
+                history.replaceState({}, '', newURL)
+            }
+        })
+    </script>
+}

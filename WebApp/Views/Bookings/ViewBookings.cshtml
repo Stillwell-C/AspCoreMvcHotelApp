@@ -1,0 +1,92 @@
+﻿@model List<Booking>
+
+@{
+    string? timeFrame = ViewBag.TimeFrame;
+    bool? deleteBookingConfirmation = ViewBag.DeleteBookingConfirmation;
+    bool? deleteError = ViewBag.DeleteError;
+}
+
+<section class="container mt-3">
+    <h2 class="text-center">Your Bookings</h2>
+    @if (deleteBookingConfirmation == true)
+    {
+        <div class="alert alert-success d-flex align-items-center justify-content-between fade show" role="alert">
+            <div>
+                Your Booking has been successfully canceled.
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (deleteError == true)
+    {
+        <div class="alert alert-danger d-flex align-items-center justify-content-between fade show" role="alert">
+            <div>
+                Error. Booking could not be canceled. Please try again.
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <div class="my-5 p-2">
+        @if (timeFrame == "All")
+        {
+            <a asp-action="ViewBookings" asp-route-id="" class="btn btn-primary btn-lg">View Current Bookings</a>
+        } else
+        {
+            <a asp-action="ViewBookings" asp-route-id="All" class="btn btn-primary btn-lg">View All Bookings</a>
+        }
+    </div>
+
+    <ul class="p-0">
+        @if (Model != null)
+        {
+            @foreach (var booking in Model)
+            {
+                <li class="list-unstyled">
+                    <div class="hotelSearchCard p-2 mb-3 d-flex flex-column flex-md-row gap-4">
+                        <div class="mainImg overflow-hidden col-4 rounded-3 m-auto">
+                            <a asp-controller="Hotels" asp-action="ViewHotel" asp-route-id="@booking.HotelId" class="text-decoration-none"><img src="@booking.Hotel.Photo1?s=400x" alt="hotel image" class="h-100 w-100 object-fit-cover hotelCardLink"/></a>
+                        </div>
+                        <div class="flex-grow-1 p-2 d-flex flex-column justify-content-around gap-4">
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <a asp-controller="Hotels" asp-action="ViewHotel" asp-route-id="@booking.HotelId" class="text-decoration-none hotelCardLink"><h3 class="mb-0" id="hotelName">@booking.Hotel.Hotel_name</h3></a>
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-0"><small>@booking.Hotel.City, @booking.Hotel.Country</small></p>
+                                </div>
+                                <div><span>@booking.StartDate.ToShortDateString()</span> - <span>@booking.EndDate.ToShortDateString()</span></div>
+                            </div>
+                           
+                            @if (booking.EndDate >= DateTime.Today)
+                            {
+                                <div> 
+                                    <a asp-action="Edit" asp-route-id="@booking.BookingId" class="btn btn-primary">Edit Booking</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@booking.BookingId-deleteConfirmationModal">
+                                        Cancel Booking
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </li>
+                <div class="modal fade" id="@booking.BookingId-deleteConfirmationModal" tabindex="-1" aria-labelledby="@booking.BookingId-deleteConfirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body d-flex justify-content-end">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p id="@booking.BookingId-deleteConfirmationModalLabel">Are you sure you want to cancel your stay at @booking.Hotel.Hotel_name from <span>@booking.StartDate.ToShortDateString()</span> to <span>@booking.EndDate.ToShortDateString()</span>?</p>
+                            </div>
+                            <div class="modal-body d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a asp-action="Delete" asp-route-id="@booking.BookingId" class="btn btn-danger">Cancel Booking</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+    </ul>
+</section>

@@ -1,0 +1,105 @@
+﻿@model HotelSearch
+@using Microsoft.AspNetCore.Identity
+
+
+@inject SignInManager<IdentityUser> SignInManager
+
+<div class="container-fluid p-0" style="z-index: -5">
+    <div class="bg-primary d-flex align-content-center text-white" style="height: 200px">
+        <div class="container d-flex flex-column justify-content-center gap-3">
+            <h2>A lifetime of discounts? It&#39;s Genius.</h2>
+            <p>Get rewarded for your travels - unlock instant savings of 10% or more with a free HotelFinder account</p>
+            <div>
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <a asp-controller="Identity" asp-action="Account" asp-route-id="Login" asp-id class="btn btn-outline-light">Sign in / Register</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="overflow-hidden">
+        <div id="landingCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active" style="height: 480px">
+                    <img src="https://images.unsplash.com/photo-1527142879-95b61a0b8226?q=80&w=1696&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 h-100 object-fit-cover" alt="...">
+                </div>
+                <div class="carousel-item" style="height: 480px">
+                    <img src="https://images.unsplash.com/photo-1515859005217-8a1f08870f59?q=80&w=1620&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 h-100 object-fit-cover" alt="...">
+                </div>
+                <div class="carousel-item" style="height: 480px">
+                    <img src="https://images.unsplash.com/photo-1501446529957-6226bd447c46?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100 h-100 object-fit-cover" alt="...">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="container position-relative mb-5 d-flex justify-content-center">
+    <form method="post" asp-controller="hotels" asp-action="search" id="landingSearchForm" class="z-3 w-100">
+        <div class="homeSearchForm">
+            <div class="form-floating flex-grow-1">
+                <input asp-for="SearchTerm" id="searchTerm" type="text" class="form-control bg-white" placeholder="search" autocomplete="off" required />
+                <label asp-for="SearchTerm" for="searchTerm" class="form-label"></label>
+            </div>
+            <div class="form-floating">
+                <input asp-for="StartDate" id="startDate" type="date" class="form-control bg-white" placeholder="Check in" />
+                <label asp-for="StartDate" for="startDate" class="form-label"></label>
+            </div>
+            <div class="form-floating">
+                <input asp-for="EndDate" id="endDate" type="date" class="form-control bg-white" placeholder="Check out" />
+                <label asp-for="EndDate" for="endDate" class="form-label"></label>
+            </div>
+            <div class="form-floating">
+                <input asp-for="RoomQuantity" id="roomQuantity" type="number" class="form-control bg-white" placeholder="" min="1" value="1" />
+                <label asp-for="RoomQuantity" for="roomQuantity" class="form-label"></label>
+            </div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+</section>
+
+<section class="container d-flex flex-column gap-5 pt-3">
+    @await Component.InvokeAsync("HotelsByContinent")
+    @await Component.InvokeAsync("HighlyRatedHotels")
+    @await Component.InvokeAsync("FiveStarHotels")
+    @await Component.InvokeAsync("DealHotels")
+    <div class="text-center"> 
+        <a class="btn btn-primary" asp-controller="Hotels" asp-action="ViewAll">
+            See All Hotels
+        </a>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[type="date"]').prop('min', function () {
+                return new Date().toJSON().split('T')[0];
+            });
+
+            $('#startDate').on('change', function () {
+                setEndDate()
+            })
+
+            function setEndDate() {
+                var startDate = $('#startDate');
+                var endDate = $('#endDate');
+
+                if (startDate.val() >= endDate.val()) {
+                    endDate.val("");
+                }
+                $('#endDate').prop('min', function () {
+                    if (startDate.val()) {
+                        var date = new Date(startDate.val());
+                        date.setDate(date.getDate() + 1);
+                        return date.toJSON().split('T')[0];
+                    } else {
+                        return new Date().toJSON().split('T')[0];
+                    }
+                })
+            }
+
+        })
+    </script>
+}

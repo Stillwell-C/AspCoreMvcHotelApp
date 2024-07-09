@@ -1,0 +1,185 @@
+﻿@model Hotel
+
+@if (Model != null) {
+<section class="pb-5 pt-3 container">
+    <h2>@Model.Hotel_name</h2>
+    <p>@Model.Addressline1, @Model.City, @Model.Country</p>
+
+    <p class="text-success fs-5">Book stay of over $150 at this property and get a free airport taxi</p>
+    <ul class="d-flex justify-content-center flex-wrap gap-2 list-unstyled">
+            <li data-bs-toggle="modal" data-bs-target="#imgCarouselModal"><a role="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="0"><img class="object-fit-cover h-100 w-100" src="@Model.Photo1?s=450x" alt="hotel photo 1" /></a></li>
+            <li data-bs-toggle="modal" data-bs-target="#imgCarouselModal"><a role="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="1"><img class="object-fit-cover h-100 w-100" src="@Model.Photo2?s=450x" alt="hotel photo 2" /></a></li>
+            <li data-bs-toggle="modal" data-bs-target="#imgCarouselModal"><a role="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="2"><img class="object-fit-cover h-100 w-100" src="@Model.Photo3?s=450x" alt="hotel photo 3" /></a></li>
+            <li data-bs-toggle="modal" data-bs-target="#imgCarouselModal"><a role="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="3"><img class="object-fit-cover h-100 w-100" src="@Model.Photo4?s=450x" alt="hotel photo 4" /></a></li>
+            <li data-bs-toggle="modal" data-bs-target="#imgCarouselModal"><a role="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="4"><img class="object-fit-cover h-100 w-100" src="@Model.Photo5?s=450x" alt="hotel photo 5" /></a></li>
+    </ul>
+    <div class="modal fade" id="imgCarouselModal" tabindex="-1" aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                    <div id="hotelImgCarousel" class="carousel slide">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                            <button type="button" data-bs-target="#hotelImgCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="@Model.Photo1?s=1200x" alt="hotel photo 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="@Model.Photo2?s=1200x" alt="hotel photo 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="@Model.Photo3?s=1200x" alt="hotel photo 3">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="@Model.Photo4?s=1200x" alt="hotel photo 4">
+                            </div>
+                            <div class="carousel-item">
+                                <img class="d-block w-100" src="@Model.Photo5?s=1200x" alt="hotel photo 5">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#hotelImgCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#hotelImgCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row flex-column flex-md-row">
+        <div class="col-md-9">
+            <p class="fw-semibold fs-3">Experience World-class Service</p>
+            <p>@Model.Overview</p>
+        </div>
+
+        <div class="col-md-3 p-3 bg-info bg-gradient bg-opacity-25 rounded-1" id="fullStayRate">
+            <p class="fs-4 fw-semibold text-secondary">Perfect for a <span id="stayDurationNum">1</span>-night stay!</p>
+            <p>Located in the heart of @Model.City, this property has an excellent location score of @Model.Rating_average</p>
+            <p class="fs-3"><span class="fw-bold">$</span><span class="fw-bold" id="stayDurationPrice">@Model.Rates_from</span> (<span id="stayDurationDays">1 night</span>)</p>
+            <a asp-controller="Bookings" asp-action="Add" asp-route-id="@Model.Hotel_id" id="viewHotelBookNowBtn" class="btn btn-primary w-100">Reserver or book now</a>
+        </div>
+
+    </div>
+    
+    
+    <button class="btn btn-outline-secondary mt-3" data-bs-toggle="collapse" data-bs-target="#hotelMoreInformation" aria-expanded="false" aria-controls="#hotelMoreInformation">More information</button>
+    
+        <div class="collapse mt-2" id="hotelMoreInformation">
+        <div class="d-flex">
+            <div class="card pe-5">
+                <div class="card-body">
+                    <div><span class="fw-semibold">Nightly rate: </span><span>$@Model.Rates_from</span></div>
+                    <div><span class="fw-semibold">Check In: </span><span>@Model.Checkin</span></div>
+                    <div><span class="fw-semibold">Check Out: </span><span>@Model.Checkout</span></div>
+                    <div><span class="fw-semibold">Star rating: </span><span>@Model.Star_rating</span></div>
+                    <div><span class="fw-semibold">Address Line 1: </span><span>@Model.Addressline1</span></div>
+                    @if (!string.IsNullOrEmpty(Model.Addressline2))
+                    {
+                        <div><span class="fw-semibold">Address Line 2: </span><span>@Model.Addressline2</span></div>
+
+                    }
+                    @if (!string.IsNullOrEmpty(Model.City))
+                    {
+                        <div><span class="fw-semibold">City: </span><span>@Model.City</span></div>
+
+                    }
+                    @if (!string.IsNullOrEmpty(Model.State))
+                    {
+                        <div><span class="fw-semibold">State: </span><span>@Model.State</span></div>
+
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Country))
+                    {
+                        <div><span class="fw-semibold">Country: </span><span>@Model.Country</span></div>
+
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Zipcode))
+                    {
+                        <div><span class="fw-semibold">Zip code: </span><span>@Model.Zipcode</span></div>
+
+                    }
+                    <div><span class="fw-semibold">Number of reviews: </span><span>@Model.Number_of_reviews</span></div>
+                    <div><span class="fw-semibold">Average rating: </span><span>@Model.Rating_average</span></div>
+                    @if(!string.IsNullOrEmpty(Model.Brand_name))
+                    {
+                        <div><span class="fw-semibold">Brand Name: </span><span>@Model.Brand_name</span></div>
+
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.Chain_name) && Model.Chain_name.ToLower() != "no chain")
+                    {
+                        <div><span class="fw-semibold">Chain Name: </span><span>@Model.Chain_name</span></div>
+
+                    }
+                    @if (Model.Numberfloors.HasValue)
+                    {
+                        <div><span class="fw-semibold">Number of floors: </span><span>@Model.Numberfloors</span></div>
+                    }
+                    @if (Model.Numberrooms.HasValue)
+                    {
+                        <div><span class="fw-semibold">Number of rooms: </span><span>@Model.Numberrooms</span></div>
+                    }
+                    @if (Model.Yearopened.HasValue)
+                    {
+                        <div><span class="fw-semibold">Year opened: </span><span>@Model.Yearopened</span></div>
+                    }
+                    @if (Model.Yearrenovated.HasValue)
+                    {
+                        <div><span class="fw-semibold">Year renovated: </span><span>@Model.Yearrenovated</span></div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('StartDate') && urlParams.has('EndDate')) {
+                var stayDuration = Math.round((new Date(urlParams.get('EndDate')) - new Date(urlParams.get('StartDate'))) / (1000 * 60 * 60 * 24));
+                stayDuration = stayDuration > 0 ? stayDuration : 1
+                var roomQty = parseInt(urlParams.get('RoomQuantity'))
+                roomQty = roomQty > 0 ? roomQty : 1
+
+                var nightlyRate = parseInt($("#stayDurationPrice").text()) ?? 1
+
+
+                if (stayDuration > 1) {
+                    $("#stayDurationNum").text(stayDuration)
+                    $("#stayDurationDays").text(`${stayDuration} nights`)
+                    $("#stayDurationPrice").text(nightlyRate * stayDuration * roomQty)
+                } else {
+                    $("#stayDurationPrice").text(nightlyRate * roomQty)
+                }
+            }
+
+            //Update link href
+            updateLinkHref()
+
+           function updateLinkHref() {
+                var urlParams = new URLSearchParams(window.location.search).toString();
+
+                var href = $('a#viewHotelBookNowBtn').attr('href');
+
+                if (href && urlParams.length) {
+                    href += (href.match(/\?/) ? '&' : '?') + urlParams
+                    $('a#viewHotelBookNowBtn').attr('href', href);
+                }
+           }
+
+        })
+    </script>
+}

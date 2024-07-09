@@ -1,0 +1,181 @@
+﻿@model HotelSearchViewModel
+
+<section class="container pt-3">
+    <h2>Hotel Search</h2>
+    <div class="row flex-column flex-lg-row">
+        <div class="col-lg-3 bg-warning rounded-3 p-3" style="height: fit-content">
+            <div>
+                <form method="post" asp-controller="hotels" asp-action="search" id="searchPageSearchForm" class="px-3 px-lg-0">
+                    <h3>Search</h3>
+                    <div class="d-flex flex-lg-column gap-2 flex-wrap">
+                        <div class="flex-grow-1 w-100">
+                            <label asp-for="HotelSearch.SearchTerm" for="searchTerm" class="form-label"></label>
+                            <input asp-for="HotelSearch.SearchTerm" id="searchTerm" type="text" class="form-control" placeholder="Destination" autocomplete="off" />
+                        </div>
+                        <div class="w-100">
+                            <label asp-for="HotelSearch.StartDate" for="startDate" class="form-label"></label>
+                            <input asp-for="HotelSearch.StartDate" id="startDate" type="date" class="form-control" placeholder="Check in" />
+                        </div>
+                        <div class="w-100">
+                            <label asp-for="HotelSearch.EndDate" for="endDate" class="form-label"></label>
+                            <input asp-for="HotelSearch.EndDate" id="endDate" type="date" class="form-control" placeholder="Check out" />
+                        </div>
+                    </div>
+                    <h4 class="mt-2">Options</h4>
+                    <div class="d-flex flex-lg-column gap-2 flex-wrap">
+                        <div class="d-flex justify-content-lg-between justify-content-start align-items-center gap-1">
+                            <label for="priceMin" asp-for="HotelSearch.MinPrice" class="form-label" style="min-width: 70px"></label>
+                            <input asp-for="HotelSearch.MinPrice" id="priceMin" type="number" class="form-control" style="max-width: 75px" min="0" />
+                        </div>
+                        <div class="d-flex justify-content-lg-between align-items-center gap-1">
+                            <label asp-for="HotelSearch.MaxPrice" for="priceMax" class="form-label" style="min-width: 70px"></label>
+                            <input asp-for="HotelSearch.MaxPrice" id="priceMax" type="number" class="form-control" style="max-width: 75px" min="0" />
+                        </div>
+                        <div class="d-flex justify-content-lg-between align-items-center gap-1">
+                            <label asp-for="HotelSearch.AdultQuantity" for="adultNumber" class="form-label" style="min-width: 70px"></label>
+                            <input asp-for="HotelSearch.AdultQuantity" id="adultNumber" type="number" class="form-control" style="max-width: 75px" min="1" value="2" />
+                        </div>
+                        <div class="d-flex justify-content-lg-between align-items-center gap-1">
+                            <label asp-for="HotelSearch.ChildQuantity" for="childrenNumber" class="form-label" style="min-width: 70px"></label>
+                            <input asp-for="HotelSearch.ChildQuantity" id="childrenNumber" type="number" class="form-control" style="max-width: 75px" value="0" />
+                        </div>
+                        <div class="d-flex justify-content-lg-between align-items-center gap-1">
+                            <label asp-for="HotelSearch.RoomQuantity" for="roomQuantity" class="form-label" style="min-width: 70px"></label>
+                            <input asp-for="HotelSearch.RoomQuantity" id="roomQuantity" type="number" class="form-control" style="max-width: 75px" min="1" value="1" />
+                        </div>
+                    </div>
+                    <button class="btn btn-primary w-100 mt-3" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+        <ul class="col-lg-9 mt-5 mt-lg-0" id="searchResults">
+            @if (Model?.Hotels != null) {
+                @foreach (var hotel in Model.Hotels) {
+                    <partial name="_HotelCard" model="@hotel" />
+                }
+            }
+        </ul>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            var currentDate = new Date()
+
+            var startEl = $('#startDate');
+            var endEl = $('#endDate');
+            var roomsEl = $('#roomQuantity');
+
+
+            startEl.prop('min', function () {
+                return currentDate.toJSON().split('T')[0];
+            });
+
+            endEl.prop('min', function () {
+                return addDay(currentDate)
+            });
+
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('StartDate') && !$('#startDate').val()) {
+                $('#startDate').val(urlParams.get('StartDate'))
+            }
+            if (urlParams.has('EndDate') && !$('#endDate').val()) {
+                $('#endDate').val(urlParams.get('EndDate'))
+            }
+            if (urlParams.has('MinPrice') && !$('#priceMin').val()) {
+                $('#priceMin').val(urlParams.get('MinPrice'))
+            }
+            if (urlParams.has('MaxPrice') && !$('#priceMax').val()) {
+                $('#priceMax').val(urlParams.get('MaxPrice'))
+            }
+            if (urlParams.has('RoomQuantity') && !$('#roomQuantity').val()) {
+                $('#roomQuantity').val(urlParams.get('RoomQuantity'))
+            }
+            if (urlParams.has('AdultQuantity') && !$('#adultNumber').val()) {
+                $('#adultNumber').val(urlParams.get('AdultQuantity'))
+            }
+            if (urlParams.has('ChildQuantity') && !$('#childrenNumber').val()) {
+                $('#childrenNumber').val(urlParams.get('ChildQuantity'))
+            }
+
+            updateCardLinks()
+            updatePrices()
+
+            startEl.on('change', function () {
+                setEndDate()
+                updateCardLinks()
+                updatePrices()
+            })
+
+            endEl.on('change', function () {
+                updateCardLinks()
+                updatePrices()
+            })
+
+            roomsEl.on('change', function () {
+                updateCardLinks()
+                updatePrices()
+            })
+
+
+            function setEndDate() {
+                if (startEl.val() >= endEl.val()) {
+                    endEl.val(null);
+                }
+                endEl.prop('min', function () {
+                    if (startEl.val()) {
+                        return addDay(new Date(startEl.val()))
+                    } else {
+                        return addDay(currentDate)
+                    }
+                })
+            }
+
+            function updatePrices() {
+                    var stayDuration = Math.round((new Date(endEl.val()) - new Date(startEl.val())) / (1000 * 60 * 60 * 24));
+                    stayDuration = stayDuration > 0 ? stayDuration : 1
+                    var roomsQty = parseInt(roomsEl.val())
+                    roomsQty = roomsQty > 0 ? roomsQty : 1
+                   
+                    $('.ratesWrapper').each(function () {
+                        var uncalculatedRate = parseInt($(this).children('.ratesUncalculated').text())
+                        var calculatedRateEl = $(this).find('span .ratesCalculated')
+                        if (stayDuration > 1) {
+                            var calculatedRate = uncalculatedRate * stayDuration * roomsQty
+                            calculatedRateEl.text(calculatedRate)
+                        } else {
+                            calculatedRateEl.text(uncalculatedRate * roomsQty)
+                        }
+                    })  
+            }
+
+            function updateCardLinks() {
+                var urlParams = new URLSearchParams();
+
+                if (startEl.val()) urlParams.append('StartDate', startEl.val())
+                if (endEl.val()) urlParams.append('EndDate', endEl.val())
+                if (roomsEl.val()) urlParams.append('RoomQuantity', roomsEl.val())
+
+                $('.hotelCardLink').each(function () {
+                    var href = $(this).attr('href')
+                    if (href && href.match(/\?/g)) {
+                        href = href.split('?')[0]
+                    }
+
+                    if (href && urlParams.toString().length) {
+                        href += (href.match(/\?/) ? '&' : '?') + urlParams.toString()
+                        $(this).attr('href', href);
+                    }
+                })
+            }
+
+            function addDay(date) {
+                date.setDate(date.getDate() + 1)
+                return date.toJSON().split('T')[0]
+            }
+
+        })
+    </script>
+}

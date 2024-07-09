@@ -1,0 +1,79 @@
+﻿@model BookingViewModel
+
+@{
+    string action = ViewBag.Action ?? string.Empty;
+    string buttonText = action == "add" ? "Book Now" : "Update Booking";
+    string method = action == "edit" ? "put" : "post";
+}
+
+<form method="post" asp-controller="bookings" asp-action="@action" id="addHotelBookingForm" class="w-100 px-2 m-auto" style="max-width: 700px">
+    <input type="hidden" readonly asp-for="Booking.UserId" value="@Model.Booking.UserId" />
+    <input type="hidden" readonly asp-for="Booking.HotelId" value="@Model.Hotel.Hotel_id" />
+    <input type="hidden" readonly asp-for="Booking.BookingId" value="@Model.Booking.BookingId" />
+    <img src="@Model.Hotel.Photo1?s=1000x" alt="" class="mb-3 w-100 h-100 object-fit-cover rounded-1" style="max-height: 350px" />
+    <h2>Book Your Stay at @Model?.Hotel?.Hotel_name</h2>
+    <div class="my-2">
+        <span class="text-danger" asp-validation-for="Booking.BookingDayDuration"></span>
+        <span class="text-danger" asp-validation-for="Booking"></span>
+    </div>
+    <div class="d-flex flex-column gap-3">
+        <div class="d-flex gap-2 flex-column flex-md-row">
+            <div style="flex: 1">
+                <div class="form-floating">
+                    <input asp-for="Booking.StartDate" id="startDate" type="date" class="form-control" placeholder="Check in" required />
+                    <label asp-for="Booking.StartDate" for="startDate" class="form-label">Check in</label>
+                </div>
+                <span class="text-danger" asp-validation-for="Booking.StartDate"></span>
+            </div>
+
+            <div style="flex: 1">
+                <div class="form-floating flex-grow-1">
+                    <input asp-for="Booking.EndDate" id="endDate" type="date" class="form-control" placeholder="Check out" required />
+                    <label asp-for="Booking.EndDate" for="endDate" class="form-label"></label>
+                </div>
+                <span class="text-danger" asp-validation-for="Booking.EndDate"></span>
+            </div>
+        </div>
+
+        <div>
+            <div class="form-floating">
+                <input asp-for="Booking.RoomQuantity" id="roomQuantity" type="number" class="form-control" placeholder="" min="1" max="5" value="1" required />
+                <label asp-for="Booking.RoomQuantity" for="roomQuantity" class="form-label"></label>
+            </div>
+            <span class="text-danger" asp-validation-for="Booking.RoomQuantity"></span>
+        </div>
+
+        <div>
+            <div class="form-floating">
+                <textarea asp-for="Booking.SpecialRequests" id="specialRequests" type="number" class="form-control" placeholder="" maxlength="500" style="height: 100px"></textarea>
+                <label asp-for="Booking.SpecialRequests" for="roomQuantity" class="form-label"></label>
+            </div>
+            <span class="text-danger" asp-validation-for="Booking.SpecialRequests"></span>
+        </div>
+
+        <div class="d-flex gap-2 fw-semibold">
+            <label asp-for="Booking.BookingDayDuration" for="bookingDuration" class="flex-shrink-0 align-content-center"></label>
+            <input readonly type="number" asp-for="Booking.BookingDayDuration" id="bookingDuration" class="form-control-plaintext fw-semibold" />
+        </div>
+
+        <div class="d-flex gap-2 fw-semibold">
+            <label asp-for="Booking.DailyRate" for="roomDailyRate" class="flex-shrink-0 align-content-center"></label>
+            <div class="d-flex">
+                <span class="align-content-center">$</span>
+                <input readonly type="number" asp-for="Booking.DailyRate" id="roomDailyRate" class="form-control-plaintext fw-semibold" value="@Model.Hotel.Rates_from" />
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 fw-bold">
+            <label asp-for="Booking.RateTotal" for="roomTotalRate" class="flex-shrink-0 align-content-center"></label>
+            <div class="d-flex">
+                <span class="align-content-center">$</span>
+                <input readonly type="number" asp-for="Booking.RateTotal" id="roomTotalRate" class="form-control-plaintext fw-bold" />
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary" type="submit">@buttonText</button>
+        </div>
+    </div>
+</form>

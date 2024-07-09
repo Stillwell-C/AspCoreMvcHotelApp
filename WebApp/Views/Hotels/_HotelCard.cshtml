@@ -1,0 +1,48 @@
+﻿@model Hotel
+
+<li class="list-unstyled">
+    <div class="hotelSearchCard card border-secondary p-2 mb-3 d-flex flex-column flex-md-row gap-1 gap-md-4">
+        <div class="mainImg overflow-hidden col-4 rounded-3 m-auto">
+            <a asp-controller="Hotels" asp-action="ViewHotel" asp-route-id="@Model.Hotel_id" class="text-decoration-none"><img src="@Model.Photo1?s=600x" alt="hotel image" class="h-100 w-100 object-fit-cover hotelCardLink"/></a>
+        </div>
+        <div class="flex-grow-1 p-2 d-flex flex-column justify-content-around">
+            <div>
+                <div class="d-flex justify-content-between">
+                    <a asp-controller="Hotels" asp-action="ViewHotel" asp-route-id="@Model.Hotel_id" class="text-decoration-none hotelCardLink"><h3 class="mb-0">@Model.Hotel_name</h3></a>
+                    <div class="flex-shrink-0 my-auto ms-2">
+                        @if (Model.Rating_average >= 8)
+                        {
+                            <span class="me-2 d-none d-md-inline">Excellent</span>
+                        }
+                        <span class="p-2 rounded-3 bg-dark text-white">@Model.Rating_average.ToString("0.0")</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="fw-bold mb-0"><small>@Model.City, @Model.Country</small></p>
+                </div>
+            </div>
+            <div>
+                <div class="d-flex align-content-center d-none d-md-block">
+                    <span class="px-2 bg-success rounded-3 text-white"><small>Free airport taxi</small></span>
+                </div>
+                <div class="d-flex">
+                   <p class="d-none d-sm-block"><small>@Model.Overview.Substring(0, 100)...</small></p>
+                    <div class="d-flex flex-column flex-grow-1 align-self-end flex-shrink-0 text-end ratesWrapper">
+                        <span class="d-none ratesUncalculated">@Model.Rates_from</span>
+                        <span class="fs-3">$<span class="ratesCalculated">@Model.Rates_from</span></span>
+                        <span class="text-muted" style="font-size: .8rem"><small>Includes taxes and fees</small></span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="text-success d-none d-md-block">
+                    <p class="mb-0 fw-semibold"><small>Free cancellation</small></p>
+                    <p class="mb-0"><small>You can cancel later, so lock in this great price today!</small></p>
+                </div>
+                <div class="flex-shrink-0">
+                    <a asp-controller="Hotels" asp-action="ViewHotel" asp-route-id="@Model.Hotel_id" class="btn btn-primary hotelCardLink">See Availability</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>

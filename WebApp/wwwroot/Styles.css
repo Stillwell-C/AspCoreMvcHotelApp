@@ -1,0 +1,61 @@
+﻿.homeSearchForm {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    margin-top: 1.5rem
+}
+
+.homeSearchForm input,
+.homeSearchForm button {
+    border-radius: 0;
+}
+
+.hotelSearchCard {
+    min-height: 300px
+}
+
+@media (max-width: 767px) {
+
+    .homeSearchForm div:first-of-type > input {
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+    }
+
+    .homeSearchForm button {
+        border-bottom-left-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+
+
+    .hotelSearchCard .mainImg {
+        height: 50%;
+        width: 100%
+    }
+}
+
+@media (min-width: 768px) {
+
+    .homeSearchForm {
+        flex-direction: row;
+        margin-top: -25px;
+    }
+
+    .homeSearchForm div:first-of-type > input {
+        border-top-left-radius: .5rem;
+        border-bottom-left-radius: .5rem;
+    }
+
+    .homeSearchForm button {
+        border-top-right-radius: .5rem;
+        border-bottom-right-radius: .5rem;
+    }
+
+    .hotelSearchCard {
+        height: 300px
+    }
+
+    .hotelSearchCard .mainImg {
+        height: 100%
+    }
+}

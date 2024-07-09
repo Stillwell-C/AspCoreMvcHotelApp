@@ -1,0 +1,55 @@
+﻿@model BookingViewModel;
+
+@if (@Model == null) {
+    <section class="container pt-3">
+        <h2>Booking not found.</h2>
+
+        <p>We could not find your booking. If your booking has already started, you may be unable to modify this booking.</p>
+        <p>If the problem persists, please contact us.</p>
+
+        <a asp-controller="" asp-action="Index" class="btn btn-primary">Take me home</a>
+
+    </section>
+}
+
+@if (@Model != null) {
+    <section class="container pt-3">
+        <h2 class="text-center mb-3">Edit Booking</h2>
+
+        @{
+            await Html.RenderPartialAsync("_BookingForm", @Model);
+        }
+
+    </section>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            var currentDate = new Date()
+
+            console.log(currentDate.toJSON())
+
+
+            var startEl = $('#addHotelBookingForm #startDate')
+            var endEl = $('#addHotelBookingForm #endDate')
+
+            if (startEl && endEl) {
+                $(startEl).prop('min', function () {
+                    return currentDate.toJSON().split('T')[0];
+                });
+
+                $(endEl).prop('min', function () {
+                    return addDay(currentDate)
+                });
+
+            }
+
+            function addDay(date) {
+                date.setDate(date.getDate() + 1)
+                return date.toJSON().split('T')[0]
+            }
+        })
+    </script>
+}

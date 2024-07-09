@@ -1,0 +1,21 @@
+﻿@model BookingViewModel
+
+@{
+    string successType = ViewBag.Type;
+    string title = successType == "create" ? "Booking Complete!" : "Booking Successfully Updated";
+
+}
+
+<section class="container pt-3">
+    <h2>@title</h2>
+
+    <p>Booking No.: @Model.Booking.BookingId</p>
+    <p>We have confirmed your booking at @Model.Hotel.Hotel_name</p>
+    <p><span>@Model.Booking.StartDate.ToShortDateString()</span> - <span>@Model.Booking.EndDate.ToShortDateString()</span></p>
+
+    <div>
+        <a asp-controller="" asp-action="Index" class="btn btn-primary">Take me home</a>
+        <a asp-action="ViewBookings" class="btn btn-primary">View my bookings</a>
+    </div>
+
+</section>
