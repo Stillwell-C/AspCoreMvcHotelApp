@@ -2,7 +2,12 @@
   "dependencies": {
     "mssql1": {
       "type": "mssql",
-      "connectionId": "ConnectionStrings:AccountContextConnection"
+      "connectionId": "ConnectionStrings:AccountContextConnection",
+      "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:Booking"
     }
   }
 }

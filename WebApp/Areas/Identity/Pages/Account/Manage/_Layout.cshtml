@@ -1,5 +1,5 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
     {
         Layout = parentLayout.ToString();
     }
@@ -23,7 +23,7 @@
                 @RenderBody()
             </div>
         </div>
-</div>
+    </div>
 </section>
 
 @section Scripts {

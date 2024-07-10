@@ -52,7 +52,6 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 var newBooking = addBookingUseCase.Execute(bookingViewModel.Booking);
-                //Remove any important info from this before production
                 bookingViewModel.Booking = newBooking;
                 ViewBag.Type = "create";
                 return View("Success", bookingViewModel);
@@ -128,7 +127,6 @@ namespace WebApp.Controllers
                 return RedirectToAction("ViewBookings");
             }
 
-            //TODO Add error page
             TempData["DeleteError"] = true;
             return RedirectToAction("ViewBookings");
 

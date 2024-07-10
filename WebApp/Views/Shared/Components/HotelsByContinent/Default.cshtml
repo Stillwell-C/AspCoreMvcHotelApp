@@ -2,12 +2,12 @@
 
 @if (Model != null)
 {
-    <div>
+    <section>
         <h2 class="fs-4">Locations around the world</h2>
         <div class="d-flex flex-column flex-md-row justify-content-around flex-wrap gap-2">
             @foreach (var continent in Model)
             {
-                <div style="flex: 1">
+                <article style="flex: 1">
                     <div class="position-relative">
                         <a asp-controller="Hotels" asp-action="Search" asp-route-searchterm="@continent.SearchTerm.ToLower()" class="text-decoration-none hotelCardLink">
                             <img src="@continent.img?s=600x" alt="hotel image" class="w-100 object-fit-cover rounded-1" style="height: 250px"  />
@@ -17,8 +17,8 @@
                          </div>
                         </a>
                     </div>
-                </div>
+                </article>
             }
         </div>
-    </div>
+    </section>
 }
