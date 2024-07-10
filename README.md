@@ -4,7 +4,7 @@ This repository is the a hotel booking application made with ASP.NET Core 8 MVC.
 
 ## Demo
 
-The application is live [here](https://aspmvchotelapp.azurewebsites.net).
+The application is live <a href="https://aspmvchotelapp.azurewebsites.net/" target="_blank">here</a>.
 
 ## Contents
 
@@ -80,7 +80,7 @@ This project was created using use case based clean architecture where entities,
 
 #### Hotel Search
 
-![hotel search](./ProjectImages/ProfileSearch.png)
+![hotel search](./ProjectImages/HotelSearch.png)
 
 #### Hotel Page Image Carousel
 
