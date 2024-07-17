@@ -1,3 +1,5 @@
+[![kr](https://img.shields.io/badge/언어-한국어-red.svg)](https://github.com/Stillwell-C/AspCoreMvcHotelApp/blob/main/README-kr.md)
+
 # Hotel Finder
 
 This repository is the a hotel booking application made with ASP.NET Core 8 MVC.
