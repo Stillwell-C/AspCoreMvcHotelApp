@@ -1,4 +1,4 @@
-[![kr](https://img.shields.io/badge/언어-한국어-red.svg)](https://github.com/Stillwell-C/AspCoreMvcHotelApp/blob/main/README-kr.md)
+[![kr](https://img.shields.io/badge/언어-한국어-red.svg)](https://github.com/Stillwell-C/AspCoreMvcHotelApp/blob/master/README-kr.md)
 
 # Hotel Finder
 

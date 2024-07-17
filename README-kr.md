@@ -1,4 +1,4 @@
-[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/Stillwell-C/AspCoreMvcHotelApp/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/Stillwell-C/AspCoreMvcHotelApp/blob/master/README.md)
 
 # 호텔 파인더
 
